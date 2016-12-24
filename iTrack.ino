@@ -1,17 +1,3 @@
-/**
- *  ___ ___  _  _   _     ___  __  ___    ___ ___  ___
- * | __/ _ \| \| | /_\   ( _ )/  \( _ )  / __| _ \/ __|
- * | _| (_) | .` |/ _ \  / _ \ () / _ \ | (_ |  _/\__ \
- * |_| \___/|_|\_/_/ \_\ \___/\__/\___/  \___|_|  |___/
- *
- * This example is meant to work with the Adafruit
- * FONA 808 or 3G Shield or Breakout
- *
- * Copyright: 2015 Adafruit
- * Author: Todd Treece
- * Licence: MIT
- *
- */
 #include "Adafruit_FONA.h"
 
 // standard pins for the shield, adjust as necessary
