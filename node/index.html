@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            #map {
+                height: 400px;
+                width: 100%;
+            }
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src='/socket.io/socket.io.js'></script>
+        <script>
+
+            var map;
+            var marker;
+
+            function initMap() {
+                var uluru = {lat: 20.519043, lng: 20.628937};
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 16,
+                    center: uluru
+                });
+                marker = new google.maps.Marker({
+                    position: uluru,
+                    map: map
+                });
+            }
+
+            var socket = io();
+
+            socket.on('location', function(data) {
+                updateMarker(data.location);
+            });
+
+            function updateMarker(message) {
+                if(message != null) {
+                    var myLatlng = new google.maps.LatLng(message.latitude, message.longitude);
+                    var mapOptions = {
+                      zoom: 16,
+                      center: myLatlng
+                    }
+                    map.panTo(myLatlng);
+                    marker.setPosition(myLatlng);
+                }
+            }
+        </script>
+    </head>
+    <body>
+    <div id="map"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1_fFeCIMPAY37I1RAThla28UsrI9SfJA&callback=initMap">
+    </script>
+    </body>
+</html>
