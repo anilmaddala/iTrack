@@ -15,12 +15,15 @@ SoftwareSerial *fonaSerial = &fonaSS;
 Adafruit_FONA fona = Adafruit_FONA(FONA_RST);
 
 boolean DEBUG = false;
+int led = 13;
 
 void setup() {
   if(DEBUG) {
     while (! Serial);
     Serial.begin(115200);
   }
+  
+  pinMode(led, OUTPUT);
 
   fonaSerial->begin(4800);
   if (! fona.begin(*fonaSerial)) {
@@ -28,6 +31,11 @@ void setup() {
     while(1);
   }
   if(DEBUG) Serial.println(F("FONA is OK"));
+  
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);                       // wait for a second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);
 }
 
 char * append(char * str1, char * str2) {
@@ -49,7 +57,11 @@ void loop() {
 
   if (gps_success) {
     if(DEBUG) Serial.println(F("Enabling GPRS..."));
-    fona.enableGPRS(true);
+    digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+    delay(1000);
+
     String getURL;
     char sLatitude[141];
     char sLongitude[141];
