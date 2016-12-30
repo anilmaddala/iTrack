@@ -40,6 +40,8 @@ void setup() {
 
   Serial.println(F("Enabling GPS..."));
   fona.enableGPS(true);
+  Serial.println(F("Enabling GPRS..."));
+  fona.enableGPRS(true);
 }
 
 char * append(char * str1, char * str2) {
@@ -59,22 +61,35 @@ void loop() {
 
   if (gps_success) {
     
-    char sendto[11] = "8074489404";
-    char * message;
+    char * getURL;
     char sLatitude[141];
     char sLongitude[141];
+    char baseURL[100] = "ec2-54-90-96-132.compute-1.amazonaws.com";
     
     dtostrf(latitude, 6, 6, sLatitude);
     dtostrf(longitude, 6, 6, sLongitude);
-    message = append(sLatitude, "+");
-    message = append(message, sLongitude);
-    Serial.println(message);
+
+    getURL = append(baseURL, "/?latitude=");
+    getURL = append(getURL, sLatitude);
+    getURL = append(getURL, "&longitude=");
+    getURL = append(getURL, sLongitude);
     
-    if (!fona.sendSMS(sendto, message)) {
-          Serial.println(F("Failed"));
-        } else {
-          Serial.println(F("Sent!"));
+    uint16_t statuscode;
+    int16_t length;
+
+    if (!fona.HTTP_GET_start(getURL, &statuscode, (uint16_t *)&length)) {
+          Serial.println("Failed!");
         }
+/*        while (length > 0) {
+          while (fona.available()) {
+            char c = fona.read();
+            loop_until_bit_is_set(UCSR0A, UDRE0);
+            UDR0 = c;
+            length--;
+            if (! length) break;
+          }
+        }*/
+        fona.HTTP_GET_end();
 
   } else {
     Serial.println("Waiting for FONA GPS 3D fix...");
