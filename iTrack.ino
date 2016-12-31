@@ -48,19 +48,20 @@ char * append(char * str1, char * str2) {
 void loop() {
   delay(2000);
 
-  float latitude, longitude, speed_kph, heading, speed_mph, altitude;
+  float latitude, longitude;
 
   // if you ask for an altitude reading, getGPS will return false if there isn't a 3D fix
   if(DEBUG) Serial.println(F("Enabling GPS..."));
   fona.enableGPS(true);
-  boolean gps_success = fona.getGPS(&latitude, &longitude, &speed_kph, &heading);
+  boolean gps_success = fona.getGPS(&latitude, &longitude);
 
   if (gps_success) {
     if(DEBUG) Serial.println(F("Enabling GPRS..."));
+    fona.enableGPRS(true);
     digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
-    delay(1000);                       // wait for a second
+    delay(500);                       // wait for a second
     digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
-    delay(1000);
+    delay(500);
 
     String getURL;
     char sLatitude[141];
